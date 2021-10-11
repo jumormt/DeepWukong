@@ -4,21 +4,34 @@
 
 ## Setup
 
-```shell
-bash env.sh
-```
+- Environment
+
+    ```shell
+    bash env.sh
+    ```
+
+- Preprocessed Data
+
+    Download from, and unzip the data under `<project root>/data` folder.
 
 ---
 
 ## One-Step Evaluation
 
-```shell
-bash run.sh
-```
+- From Pretrained model
+  
+  - Download from.
+  - `PYTHONPATH="." python src/evaluate.py <path to the pretrained model>`
+
+- Training and Testing
+
+  ```shell
+  bash run.sh
+  ```
 
 ---
 
-**Run from beginning:**
+**Run from the beginning:**
 
 ## Data preparation
 

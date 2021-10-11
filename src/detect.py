@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 import torch
 
 from src.data_generator import build_PDG, build_XFG
-from models.vd import DeepWukong
+from models.vd import DeepWuKong
 from src.datas.graphs import XFG
 import networkx as nx
 from src.preprocess.symbolizer import clean_gadget, tokenize_code_line
@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     # load model
-    model = DeepWukong.load_from_checkpoint(checkpoint_path=__args.check_point).to(device)
+    model = DeepWuKong.load_from_checkpoint(checkpoint_path=__args.check_point).to(device)
     # load config and vocab
     config = model.hparams["config"]
     vocab = model.hparams["vocab"]

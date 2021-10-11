@@ -5,7 +5,7 @@ from commode_utils.common import print_config
 from omegaconf import OmegaConf, DictConfig
 from pytorch_lightning import seed_everything
 from src.datas.datamodules import XFGDataModule
-from src.models.vd import DeepWukong
+from src.models.vd import DeepWuKong
 from src.train import train
 from src.utils import filter_warnings, PAD
 from src.vocabulary import Vocabulary
@@ -35,7 +35,7 @@ def vul_detect(config_path: str):
     data_module = XFGDataModule(config, vocab)
 
     # Init model
-    model = DeepWukong(config, vocab, vocab_size, pad_idx)
+    model = DeepWuKong(config, vocab, vocab_size, pad_idx)
 
     train(model, data_module, config)
 

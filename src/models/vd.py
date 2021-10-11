@@ -13,7 +13,7 @@ from torch_geometric.data import Batch
 from src.vocabulary import Vocabulary
 
 
-class DeepWukong(LightningModule):
+class DeepWuKong(LightningModule):
     r"""vulnerability detection model to detect vulnerability
 
     Args:

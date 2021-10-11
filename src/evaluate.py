@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 from pytorch_lightning import Trainer, seed_everything
 import torch
-from src.models.vd import DeepWukong
+from src.models.vd import DeepWuKong
 from src.datas.datamodules import XFGDataModule
 from src.utils import filter_warnings
 
@@ -20,7 +20,7 @@ def test(checkpoint_path: str, data_folder: str = None, batch_size: int = None):
 
     """
     filter_warnings()
-    model = DeepWukong.load_from_checkpoint(checkpoint_path)
+    model = DeepWuKong.load_from_checkpoint(checkpoint_path)
     config = model.hparams["config"]
     vocabulary = model.hparams["vocab"]
     if data_folder is not None:
