@@ -1,0 +1,1 @@
+PYTHONPATH="." python src/run.py

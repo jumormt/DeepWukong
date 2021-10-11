@@ -1,0 +1,10 @@
+.idea/
+.pytest_cache/
+.mypy_cache/
+__pycache__/
+notebooks/
+ts_logger/
+
+*.pyc
+.*/
+*.html
