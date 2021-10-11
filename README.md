@@ -12,7 +12,7 @@
 
 - Preprocessed Data
 
-    Download from, and unzip the data under `<project root>/data` folder.
+    Download from [data](https://bupteducn-my.sharepoint.com/:u:/g/personal/jackiecheng_bupt_edu_cn/EalnVAYC8zZDgwhPmGJ034cBYNZ8zB7-mNSNm-a7oYXkcw?e=eRUc50), and unzip the data under `<project root>/data` folder.
 
 ---
 
@@ -20,7 +20,7 @@
 
 - From Pretrained model
   
-  - Download from.
+  - Download from [pretrained model](https://bupteducn-my.sharepoint.com/:u:/g/personal/jackiecheng_bupt_edu_cn/EesTvivx1UlEo9THYRSCYkMBMsZqKXgNVYx9wTToYnDwxg?e=Z4nz23).
   - `PYTHONPATH="." python src/evaluate.py <path to the pretrained model>`
 
 - Training and Testing
