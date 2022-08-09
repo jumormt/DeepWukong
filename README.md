@@ -31,11 +31,13 @@
 
 ---
 
-**Run from the beginning:**
+**Run from scratch:**
 
 ## Data preparation
 
 ### Use joern to Generate PDG
+
+**We use the old version of [joern](https://github.com/ives-nx/dwk_preprocess/tree/main/joern_slicer/joern) to generate PDG**
 
 ```shell
 PYTHONPATH="." python src/joern/joern-parse.py -c <config file>
