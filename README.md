@@ -4,18 +4,6 @@
 
 > (TOSEM'21) DeepWukong: Statically Detecting Software Vulnerabilities Using Deep Graph Neural Network
 
-## Results
-
-Results on CWE119 dataset (GCN encoder, RTX A5000 x2):
-
-| Metric | Value |
-|--------|-------|
-| Accuracy | 98.30% |
-| F1 | 94.56% |
-| Precision | 95.10% |
-| Recall | 94.02% |
-| FPR | 0.90% |
-
 ## Docker (Recommended)
 
 ### Build

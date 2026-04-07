@@ -4,18 +4,6 @@
 
 > (TOSEM'21) DeepWukong: Statically Detecting Software Vulnerabilities Using Deep Graph Neural Network
 
-## 实验结果
-
-CWE119 数据集（GCN 编码器，RTX A5000 x2）：
-
-| 指标 | 数值 |
-|------|------|
-| 准确率 | 98.30% |
-| F1 | 94.56% |
-| 精确率 | 95.10% |
-| 召回率 | 94.02% |
-| 误报率 | 0.90% |
-
 ## Docker（推荐）
 
 ### 构建
