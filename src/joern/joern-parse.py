@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from os import system
-from os.path import join
+from os.path import join, abspath
 from typing import cast
 from omegaconf import OmegaConf, DictConfig
 
@@ -21,6 +21,7 @@ if __name__ == "__main__":
     config = cast(DictConfig, OmegaConf.load(__args.config))
     joern = config.joern_path
     root = join(config.data_folder, config.dataset.name)
-    source_path = join(root, "source-code")
+    # Use abspath so joern CSV output paths match data_generator.py expectations
+    source_path = abspath(join(root, "source-code"))
     out_path = join(root, "csv")
     system(f"{joern} {out_path} {source_path}")
