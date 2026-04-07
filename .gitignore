@@ -4,6 +4,15 @@
 __pycache__/
 notebooks/
 ts_logger/
+lightning_logs/
+
+# Data files (too large for git)
+data/CWE119/
+data/*/XFG/
+data/*/source-code/
+data/*/csv/
+data/*/*.json
+data/*/*.wv
 
 *.pyc
 .*/

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import pickle
 import networkx as nx
 from os.path import exists
 from typing import List
@@ -25,7 +26,8 @@ class XFG:
             xfg_nx: nx.DiGraph = xfg
         elif path is not None:
             assert exists(path), f"xfg {path} not exists!"
-            xfg_nx: nx.DiGraph = nx.read_gpickle(path)
+            with open(path, "rb") as f:
+                xfg_nx: nx.DiGraph = pickle.load(f)
         else:
             raise ValueError("invalid inputs!")
         self.__init_graph(xfg_nx)

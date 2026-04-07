@@ -124,7 +124,7 @@ class STEncoder(torch.nn.Module):
         """
         model = KeyedVectors.load(w2v_path, mmap="r")
         w2v_weights = self.__wd_embedding.weight.data
-        for wd in model.index2word:
+        for wd in model.index_to_key:
             w2v_weights[vocab.convert_token_to_id(wd)] = torch.from_numpy(model[wd])
         self.__wd_embedding.weight.data.copy_(w2v_weights)
 

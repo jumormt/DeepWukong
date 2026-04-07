@@ -1,3 +1,4 @@
+import pickle
 import xml.etree.ElementTree as ET
 import networkx as nx
 from typing import List, Set, Tuple, Dict
@@ -289,7 +290,8 @@ def dump_XFG(res: Dict[str, List[nx.DiGraph]], out_root_path: str,
             os.makedirs(k_root_path)
         for XFG in res[k]:
             out_path = join(k_root_path, f"{XFG.graph['key_line']}.xfg.pkl")
-            nx.write_gpickle(XFG, out_path)
+            with open(out_path, "wb") as f:
+                pickle.dump(XFG, f)
 
 
 def configure_arg_parser() -> ArgumentParser:

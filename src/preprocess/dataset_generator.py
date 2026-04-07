@@ -1,3 +1,4 @@
+import pickle
 from typing import List, cast
 from os.path import join
 from argparse import ArgumentParser
@@ -83,7 +84,8 @@ def handle_queue_message(queue: Queue):
             os.system(f"rm {message.xfg_path}")
         else:
             if message.XFG is not None:
-                nx.write_gpickle(message.XFG, message.xfg_path)
+                with open(message.xfg_path, "wb") as f:
+                    pickle.dump(message.XFG, f)
                 xfg_ct += 1
     return xfg_ct
 
@@ -105,7 +107,8 @@ def process_parallel(testcaseid: str, queue: Queue, XFG_root_path: str, split_to
         xfg_ps = os.listdir(k_root_path)
         for xfg_p in xfg_ps:
             xfg_path = join(k_root_path, xfg_p)
-            xfg: nx.DiGraph = nx.read_gpickle(xfg_path)
+            with open(xfg_path, "rb") as _f:
+                xfg: nx.DiGraph = pickle.load(_f)
             for idx, n in enumerate(xfg):
                 if "code_sym_token" in xfg.nodes[n]:
                     return testcaseid

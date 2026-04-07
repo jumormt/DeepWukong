@@ -7,7 +7,7 @@ import torch
 
 from src.datas.samples import XFGBatch, XFGSample
 from src.datas.datasets import XFGDataset
-from typing import List, Optional
+from typing import List
 from torch.utils.data import DataLoader, Dataset
 from src.vocabulary import Vocabulary
 
@@ -67,7 +67,7 @@ class XFGDataModule(LightningDataModule):
     def transfer_batch_to_device(
             self,
             batch: XFGBatch,
-            device: Optional[torch.device] = None) -> XFGBatch:
-        if device is not None:
-            batch.move_to_device(device)
+            device: torch.device,
+            dataloader_idx: int = 0) -> XFGBatch:
+        batch.move_to_device(device)
         return batch

@@ -1,27 +1,26 @@
-torch==1.9.0
+torch>=2.0.0
 
 # Code quality
-black==21.6b0
-mypy==0.910
-pytest==6.2.4
+black
+mypy
+pytest
 
 # Data preprocessing
 dpu-utils
-datasets~=1.8.0
-wordninja==2.0.0
-gensim==3.8.3
-networkx==2.5.1
+wordninja
+gensim>=4.0.0
+networkx>=2.6
 
 # Deep learning
-torch-geometric==2.0.1
-torch-scatter==2.0.7    # required for torch geometric
-torch-sparse==0.6.10    # required for torch geometric
-pytorch-lightning==1.3.7post0
-torchmetrics==0.3.2
-commode-utils==0.3.1
+torch-geometric>=2.3.0
+pytorch-lightning>=2.0.0
+torchmetrics
+commode-utils>=0.4.0
 
 # Utils
-tqdm==4.49.0
-omegaconf==2.1.0
+tqdm
+omegaconf>=2.1.0
+scikit-learn
+tensorboard
 
 jupyter

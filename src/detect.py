@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 import torch
 
 from src.data_generator import build_PDG, build_XFG
-from models.vd import DeepWuKong
+from src.models.vd import DeepWuKong
 from src.datas.graphs import XFG
 import networkx as nx
 from src.preprocess.symbolizer import clean_gadget, tokenize_code_line

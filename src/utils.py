@@ -1,4 +1,5 @@
 import hashlib
+import pickle
 from warnings import filterwarnings
 import subprocess
 
@@ -90,7 +91,8 @@ def unique_xfg_raw(xfg_path_list):
     conflict_ct = 0
 
     for xfg_path in xfg_path_list:
-        xfg = nx.read_gpickle(xfg_path)
+        with open(xfg_path, "rb") as _f:
+            xfg = pickle.load(_f)
         label = xfg.graph["label"]
         file_path = xfg.graph["file_paths"][0]
         assert exists(file_path), f"{file_path} not exists!"
@@ -133,7 +135,8 @@ def unique_xfg_sym(xfg_path_list):
     conflict_ct = 0
 
     for xfg_path in tqdm(xfg_path_list, total=len(xfg_path_list), desc="xfgs: "):
-        xfg = nx.read_gpickle(xfg_path)
+        with open(xfg_path, "rb") as _f:
+            xfg = pickle.load(_f)
         label = xfg.graph["label"]
         file_path = xfg.graph["file_paths"][0]
         assert exists(file_path), f"{file_path} not exists!"

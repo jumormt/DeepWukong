@@ -1,3 +1,4 @@
+import pickle
 from argparse import ArgumentParser
 from typing import cast, List
 from omegaconf import OmegaConf, DictConfig
@@ -23,7 +24,8 @@ def process_parallel(path: str, split_token: bool):
     Returns:
 
     """
-    xfg = nx.read_gpickle(path)
+    with open(path, "rb") as _f:
+        xfg = pickle.load(_f)
     tokens_list = list()
     for ln in xfg:
         code_tokens = xfg.nodes[ln]["code_sym_token"]
@@ -72,7 +74,7 @@ def train_word_embedding(config_path: str):
     print("training w2v...")
     num_workers = cpu_count(
     ) if config.num_workers == -1 else config.num_workers
-    model = Word2Vec(sentences=tokens_list, min_count=3, size=config.gnn.embed_size,
+    model = Word2Vec(sentences=tokens_list, min_count=3, vector_size=config.gnn.embed_size,
                      max_vocab_size=config.dataset.token.vocabulary_size, workers=num_workers, sg=1)
     model.wv.save(f"{root}/{cweid}/w2v.wv")
 

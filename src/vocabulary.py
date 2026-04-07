@@ -30,8 +30,8 @@ class Vocabulary:
         attr = dict()
         for idx, tk in enumerate(speicial_tokens):
             attr[tk] = idx
-        for wd in model.vocab:
-            attr[wd] = model.vocab[wd].index + len(speicial_tokens)
+        for wd in model.key_to_index:
+            attr[wd] = model.key_to_index[wd] + len(speicial_tokens)
         return Vocabulary(token_to_id=attr)
 
     @staticmethod

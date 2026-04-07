@@ -2,11 +2,10 @@ from torch import nn
 from omegaconf import DictConfig
 import torch
 from src.datas.samples import XFGBatch
-from typing import Dict
+from typing import Dict, List
 from pytorch_lightning import LightningModule
 from src.models.modules.gnns import GraphConvEncoder, GatedGraphConvEncoder
 from torch.optim import Adam, SGD, Adamax, RMSprop
-from pytorch_lightning.utilities.types import EPOCH_OUTPUT
 import torch.nn.functional as F
 from src.metrics import Statistic
 from torch_geometric.data import Batch
@@ -59,6 +58,11 @@ class DeepWuKong(LightningModule):
             ]
         self.__hidden_layers = nn.Sequential(*layers)
         self.__classifier = nn.Linear(hidden_size, config.classifier.n_classes)
+
+        # Accumulate step outputs for epoch_end aggregation (PL 2.x)
+        self._train_step_outputs: List[Dict] = []
+        self._val_step_outputs: List[Dict] = []
+        self._test_step_outputs: List[Dict] = []
 
     def forward(self, batch: Batch) -> torch.Tensor:
         """
@@ -117,7 +121,10 @@ class DeepWuKong(LightningModule):
                      batch_metric["train_f1"],
                      prog_bar=True,
                      logger=False)
-        return {"loss": loss, "statistic": statistic}
+
+        output = {"loss": loss, "statistic": statistic}
+        self._train_step_outputs.append(output)
+        return output
 
     def validation_step(self, batch: XFGBatch,
                         batch_idx: int) -> torch.Tensor:  # type: ignore
@@ -125,7 +132,6 @@ class DeepWuKong(LightningModule):
         logits = self(batch.graphs)
         loss = F.cross_entropy(logits, batch.labels)
 
-        result: Dict = {"val_loss": loss}
         with torch.no_grad():
             _, preds = logits.max(dim=1)
             statistic = Statistic().calculate_statistic(
@@ -133,9 +139,10 @@ class DeepWuKong(LightningModule):
                 preds,
                 2,
             )
-            batch_metric = statistic.calculate_metrics(group="val")
-            result.update(batch_metric)
-        return {"loss": loss, "statistic": statistic}
+
+        output = {"loss": loss, "statistic": statistic}
+        self._val_step_outputs.append(output)
+        return output
 
     def test_step(self, batch: XFGBatch,
                   batch_idx: int) -> torch.Tensor:  # type: ignore
@@ -143,7 +150,6 @@ class DeepWuKong(LightningModule):
         logits = self(batch.graphs)
         loss = F.cross_entropy(logits, batch.labels)
 
-        result: Dict = {"test_loss", loss}
         with torch.no_grad():
             _, preds = logits.max(dim=1)
             statistic = Statistic().calculate_statistic(
@@ -151,13 +157,13 @@ class DeepWuKong(LightningModule):
                 preds,
                 2,
             )
-            batch_metric = statistic.calculate_metrics(group="test")
-            result.update(batch_metric)
 
-        return {"loss": loss, "statistic": statistic}
+        output = {"loss": loss, "statistic": statistic}
+        self._test_step_outputs.append(output)
+        return output
 
     # ========== EPOCH END ==========
-    def _prepare_epoch_end_log(self, step_outputs: EPOCH_OUTPUT,
+    def _prepare_epoch_end_log(self, step_outputs: List[Dict],
                                step: str) -> Dict[str, torch.Tensor]:
         with torch.no_grad():
             losses = [
@@ -167,18 +173,21 @@ class DeepWuKong(LightningModule):
             mean_loss = torch.stack(losses).mean()
         return {f"{step}_loss": mean_loss}
 
-    def _shared_epoch_end(self, step_outputs: EPOCH_OUTPUT, group: str):
+    def _shared_epoch_end(self, step_outputs: List[Dict], group: str):
         log = self._prepare_epoch_end_log(step_outputs, group)
         statistic = Statistic.union_statistics(
             [out["statistic"] for out in step_outputs])
         log.update(statistic.calculate_metrics(group))
         self.log_dict(log, on_step=False, on_epoch=True)
 
-    def training_epoch_end(self, training_step_output: EPOCH_OUTPUT):
-        self._shared_epoch_end(training_step_output, "train")
+    def on_train_epoch_end(self):
+        self._shared_epoch_end(self._train_step_outputs, "train")
+        self._train_step_outputs.clear()
 
-    def validation_epoch_end(self, validation_step_output: EPOCH_OUTPUT):
-        self._shared_epoch_end(validation_step_output, "val")
+    def on_validation_epoch_end(self):
+        self._shared_epoch_end(self._val_step_outputs, "val")
+        self._val_step_outputs.clear()
 
-    def test_epoch_end(self, test_step_output: EPOCH_OUTPUT):
-        self._shared_epoch_end(test_step_output, "test")
+    def on_test_epoch_end(self):
+        self._shared_epoch_end(self._test_step_outputs, "test")
+        self._test_step_outputs.clear()

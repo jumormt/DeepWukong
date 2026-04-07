@@ -29,8 +29,7 @@ def test(checkpoint_path: str, data_folder: str = None, batch_size: int = None):
         config.hyper_parameters.test_batch_size = batch_size
     data_module = XFGDataModule(config, vocabulary)
     seed_everything(config.seed)
-    gpu = 1 if torch.cuda.is_available() else None
-    trainer = Trainer(gpus=gpu)
+    trainer = Trainer(accelerator="auto", devices="auto")
     trainer.test(model, datamodule=data_module)
 
 

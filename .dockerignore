@@ -1,0 +1,29 @@
+# Data (mounted at runtime, keep sensiAPI.txt)
+data/CWE119/
+data/*/XFG/
+data/*/source-code/
+data/*/csv/
+data/*/*.json
+data/*/*.wv
+
+# Build artifacts
+lightning_logs/
+ts_logger/
+__pycache__/
+*.pyc
+*.pyo
+.mypy_cache/
+.pytest_cache/
+
+# IDE & Git
+.git/
+.gitignore
+.idea/
+*.swp
+
+# Docs & misc
+docs/
+notebooks/
+LICENSE
+mypy.ini
+*.md
