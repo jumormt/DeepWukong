@@ -74,8 +74,8 @@ jobs:
           vocab = Vocabulary(token_to_id={'<PAD>': 0, '<UNK>': 1, '<MASK>': 2, 'int': 3, 'x': 4})
           model = DeepWuKong(config, vocab, vocab.get_vocab_size(), vocab.get_pad_id())
 
-          # Dummy forward pass
-          x = torch.randint(0, 5, (4, 16))
+          # Dummy forward pass — use non-zero tokens to avoid empty sequences
+          x = torch.randint(1, 5, (4, 16))  # 1-4, no PAD (0)
           edge_index = torch.tensor([[0,1,2],[1,2,3]], dtype=torch.long)
           batch = Batch.from_data_list([Data(x=x, edge_index=edge_index)])
           out = model(batch)
