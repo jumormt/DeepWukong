@@ -28,7 +28,8 @@ docker build -t deepwukong .
 
 ```shell
 # Download and extract data first
-wget -O Data.7z "<link below>"
+# See "Data" section below for download link
+wget -O Data.7z "https://bupteducn-my.sharepoint.com/:u:/g/personal/jackiecheng_bupt_edu_cn/EalnVAYC8zZDgwhPmGJ034cBYNZ8zB7-mNSNm-a7oYXkcw?e=eRUc50&download=1"
 7z x Data.7z -odata/
 
 # Train on GPU
