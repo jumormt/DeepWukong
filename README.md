@@ -47,25 +47,30 @@ docker run --gpus all \
 Place your source code under `data/<DATASET>/source-code/` with a `manifest.xml` (see [Data Preparation Guide](docs/DATA_PREPARATION.md) for format), then run each step:
 
 ```shell
-DWK="docker run --gpus all -v $(pwd)/data:/workspace/data"
-
-# Step 1: Generate PDG from source code (joern, requires Java)
-$DWK deepwukong src/joern/joern-parse.py -c configs/dwk.yaml
+# Step 1: Generate PDG from source code (joern)
+docker run --gpus all -v $(pwd)/data:/workspace/data \
+  deepwukong src/joern/joern-parse.py -c configs/dwk.yaml
 
 # Step 2: Extract XFG from PDG
-$DWK deepwukong src/data_generator.py -c configs/dwk.yaml
+docker run --gpus all -v $(pwd)/data:/workspace/data \
+  deepwukong src/data_generator.py -c configs/dwk.yaml
 
 # Step 3: Symbolize and split into train/val/test
-$DWK deepwukong src/preprocess/dataset_generator.py -c configs/dwk.yaml
+docker run --gpus all -v $(pwd)/data:/workspace/data \
+  deepwukong src/preprocess/dataset_generator.py -c configs/dwk.yaml
 
 # Step 4: Train word embeddings
-$DWK deepwukong src/preprocess/word_embedding.py -c configs/dwk.yaml
+docker run --gpus all -v $(pwd)/data:/workspace/data \
+  deepwukong src/preprocess/word_embedding.py -c configs/dwk.yaml
 
 # Step 5: Train model
-$DWK deepwukong src/run.py -c configs/dwk.yaml
+docker run --gpus all -v $(pwd)/data:/workspace/data \
+  deepwukong src/run.py -c configs/dwk.yaml
 
 # Step 6 (optional): Evaluate a saved checkpoint
-$DWK -v $(pwd)/ts_logger:/workspace/ts_logger \
+docker run --gpus all \
+  -v $(pwd)/data:/workspace/data \
+  -v $(pwd)/ts_logger:/workspace/ts_logger \
   deepwukong src/evaluate.py <path to checkpoint>
 ```
 

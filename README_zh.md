@@ -47,25 +47,30 @@ docker run --gpus all \
 将源代码放在 `data/<数据集名>/source-code/` 下，并准备 `manifest.xml`（格式见[数据准备指南](docs/DATA_PREPARATION_zh.md)），然后逐步执行：
 
 ```shell
-DWK="docker run --gpus all -v $(pwd)/data:/workspace/data"
-
 # 第 1 步：用 joern 从源代码生成 PDG
-$DWK deepwukong src/joern/joern-parse.py -c configs/dwk.yaml
+docker run --gpus all -v $(pwd)/data:/workspace/data \
+  deepwukong src/joern/joern-parse.py -c configs/dwk.yaml
 
 # 第 2 步：从 PDG 提取 XFG
-$DWK deepwukong src/data_generator.py -c configs/dwk.yaml
+docker run --gpus all -v $(pwd)/data:/workspace/data \
+  deepwukong src/data_generator.py -c configs/dwk.yaml
 
 # 第 3 步：符号化并划分训练/验证/测试集
-$DWK deepwukong src/preprocess/dataset_generator.py -c configs/dwk.yaml
+docker run --gpus all -v $(pwd)/data:/workspace/data \
+  deepwukong src/preprocess/dataset_generator.py -c configs/dwk.yaml
 
 # 第 4 步：训练词向量
-$DWK deepwukong src/preprocess/word_embedding.py -c configs/dwk.yaml
+docker run --gpus all -v $(pwd)/data:/workspace/data \
+  deepwukong src/preprocess/word_embedding.py -c configs/dwk.yaml
 
 # 第 5 步：训练模型
-$DWK deepwukong src/run.py -c configs/dwk.yaml
+docker run --gpus all -v $(pwd)/data:/workspace/data \
+  deepwukong src/run.py -c configs/dwk.yaml
 
 # 第 6 步（可选）：评估已保存的模型
-$DWK -v $(pwd)/ts_logger:/workspace/ts_logger \
+docker run --gpus all \
+  -v $(pwd)/data:/workspace/data \
+  -v $(pwd)/ts_logger:/workspace/ts_logger \
   deepwukong src/evaluate.py <checkpoint 路径>
 ```
 
