@@ -4,7 +4,7 @@ This guide explains how to prepare custom training data for DeepWukong.
 
 ## Overview
 
-DeepWukong works on **XFG (eXtended Flow Graph)** — a program slice centered around security-sensitive operations (API calls, array accesses, pointer dereferences, arithmetic). The pipeline is:
+DeepWukong works on **XFG** — a program slice centered around security-sensitive operations (API calls, array accesses, pointer dereferences, arithmetic). The pipeline is:
 
 ```
 Source Code → [joern] → PDG (CSV) → [data_generator] → XFG (pickle)
@@ -196,6 +196,3 @@ To add custom sensitive APIs, append them to this file:
 ...,my_custom_api,another_api
 ```
 
----
-
-> This document was generated with [Claude Code](https://claude.ai/claude-code)

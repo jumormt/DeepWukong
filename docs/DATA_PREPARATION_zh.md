@@ -199,6 +199,3 @@ PYTHONPATH="." python src/run.py -c configs/my_dataset.yaml
 ...,my_custom_api,another_api
 ```
 
----
-
-> 本文档由 [Claude Code](https://claude.ai/claude-code) 辅助生成

@@ -1,5 +1,7 @@
 # DeepWukong
 
+[中文文档](README_zh.md)
+
 > (TOSEM'21) DeepWukong: Statically Detecting Software Vulnerabilities Using Deep Graph Neural Network
 
 ## Results
@@ -139,7 +141,7 @@ See [Data Preparation Guide](docs/DATA_PREPARATION.md) for detailed instructions
 
 ### Use joern to Generate PDG
 
-**We use the old version of [joern](https://github.com/ives-nx/dwk_preprocess/tree/main/joern_slicer/joern) to generate PDG**
+joern is included in `joern/` directory (requires Java 8+).
 
 ```shell
 PYTHONPATH="." python src/joern/joern-parse.py -c <config file>
