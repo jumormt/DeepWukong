@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.11"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.python-version }}-
+
+      - name: Install dependencies
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install torch-geometric
+          pip install -r requirements.txt
+          pip install tensorboard
+
+      - name: Import check
+        run: |
+          python -c "
+          import sys
+          sys.path.insert(0, '.')
+
+          from src.utils import filter_warnings, PAD
+          from src.vocabulary import Vocabulary
+          from src.metrics import Statistic
+          from src.datas.samples import XFGSample, XFGBatch
+          from src.datas.graphs import XFG
+          from src.datas.datasets import XFGDataset
+          from src.datas.datamodules import XFGDataModule
+          from src.models.modules.common_layers import STEncoder, RNNLayer
+          from src.models.modules.gnns import GraphConvEncoder, GatedGraphConvEncoder
+          from src.models.vd import DeepWuKong
+          from src.train import train
+          from src.evaluate import test
+          from src.preprocess.symbolizer import clean_gadget, tokenize_code_line
+
+          print('All imports OK')
+          "
+
+      - name: Smoke test (CPU forward pass)
+        run: |
+          python -c "
+          import sys, torch
+          sys.path.insert(0, '.')
+
+          from omegaconf import OmegaConf
+          from src.models.vd import DeepWuKong
+          from src.vocabulary import Vocabulary
+          from torch_geometric.data import Data, Batch
+
+          config = OmegaConf.load('configs/dwk.yaml')
+          vocab = Vocabulary(token_to_id={'<PAD>': 0, '<UNK>': 1, '<MASK>': 2, 'int': 3, 'x': 4})
+          model = DeepWuKong(config, vocab, vocab.get_vocab_size(), vocab.get_pad_id())
+
+          # Dummy forward pass
+          x = torch.randint(0, 5, (4, 16))
+          edge_index = torch.tensor([[0,1,2],[1,2,3]], dtype=torch.long)
+          batch = Batch.from_data_list([Data(x=x, edge_index=edge_index)])
+          out = model(batch)
+          assert out.shape == (1, 2), f'Unexpected shape: {out.shape}'
+
+          print(f'Forward pass OK: {out.shape}')
+          "
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t deepwukong .
+
+      - name: Verify image
+        run: |
+          docker run --rm deepwukong -c "
+          import torch
+          print('PyTorch:', torch.__version__)
+          print('CUDA build:', torch.cuda.is_available())
+          from src.models.vd import DeepWuKong
+          print('Model import OK')
+          "

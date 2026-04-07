@@ -16,4 +16,6 @@ data/*/*.wv
 
 *.pyc
 .*/
+!.github/
+!.dockerignore
 *.html
