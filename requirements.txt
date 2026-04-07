@@ -2,17 +2,17 @@ torch>=2.0.0
 
 # Data preprocessing
 wordninja==2.0.0
-gensim==4.4.0
-networkx==3.4.2
+gensim>=4.0.0
+networkx>=2.6
 
 # Deep learning
-torch-geometric==2.7.0
-pytorch-lightning==2.6.1
-torchmetrics==1.9.0
-commode-utils==0.4.2
+torch-geometric>=2.3.0
+pytorch-lightning>=2.0.0
+torchmetrics>=1.0.0
+commode-utils>=0.4.0
 
 # Utils
-tqdm==4.67.1
-omegaconf==2.3.0
-scikit-learn==1.8.0
-tensorboard==2.20.0
+tqdm>=4.49.0
+omegaconf>=2.1.0
+scikit-learn>=1.0.0
+tensorboard>=2.0.0

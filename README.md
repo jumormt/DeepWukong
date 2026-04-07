@@ -91,7 +91,7 @@ docker run --gpus all \
 
 ## Local Setup
 
-- Requirements: Python >= 3.9, PyTorch >= 2.0 (CUDA recommended)
+- Requirements: Python >= 3.10, PyTorch >= 2.0 (CUDA recommended)
 
 - Install dependencies
 

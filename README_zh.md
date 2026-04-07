@@ -91,7 +91,7 @@ docker run --gpus all \
 
 ## 本地安装
 
-- 环境要求：Python >= 3.9，PyTorch >= 2.0（推荐 CUDA 版本）
+- 环境要求：Python >= 3.10，PyTorch >= 2.0（推荐 CUDA 版本）
 
 - 安装依赖
 
